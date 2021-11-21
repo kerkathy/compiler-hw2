@@ -47,7 +47,7 @@ arr_type: ARRAY INT_NUM OF type {};
 const_decl: VAR id_list COLON lit_const SEMI {};
 /*int_const: INT_NUM {};*/
 lit_const: INT_NUM {} | REAL_NUM {} | STR_LIT {} | TRUE {} | FALSE {};
-stmt: comp_stmt {} | simp_stmt {} | cond_stmt {} | while_stmt {} | for_stmt {} | return_stmt {};
+stmt: comp_stmt {} | simp_stmt {} | cond_stmt {} | while_stmt {} | for_stmt {} | return_stmt {} | func_call {} ;
 comp_stmt: BEG var_const_decl_list stmt_list END {};
 simp_stmt: assign_stmt {} | print_stmt {} | read_stmt {};
 assign_stmt: var_ref ASSIGN expr SEMI {};
@@ -64,11 +64,12 @@ while_stmt: WHILE expr DO comp_stmt END DO {};
 for_stmt: FOR ID ASSIGN INT_NUM TO INT_NUM DO comp_stmt END DO {};
 /*for_stmt: FOR ID ASSIGN int_const TO int_const DO comp_stmt END DO {};*/
 return_stmt: RETURN expr SEMI {};
-func_call: ID LEFT_PRN expr_list RIGHT_PRN {};
-expr: lit_const {} | var_ref {} | func_call {} | arith_expr {};
+func_call: ID LEFT_PRN expr_list RIGHT_PRN SEMI {};
+func_call_nosemi: ID LEFT_PRN expr_list RIGHT_PRN {};
+expr: lit_const {} | var_ref {} | func_call_nosemi {} | arith_expr {};
 arith_expr: arith_expr AND arith_expr {}
 		  | arith_expr OR arith_expr {}
-		  | arith_expr NOT arith_expr {}
+		  | NOT arith_expr {}
 		  | arith_expr LESS arith_expr {}
 		  | arith_expr LESS_EQU arith_expr {}
 		  | arith_expr NOT_EQU arith_expr {}
@@ -82,7 +83,7 @@ arith_expr: arith_expr AND arith_expr {}
 		  | arith_expr MUL arith_expr {}
 		  | SUB arith_expr %prec MUL {}
 		  | LEFT_PRN arith_expr RIGHT_PRN {} 
-		  | lit_const {} | var_ref {} | func_call {} ;
+		  | lit_const {} | var_ref {} | func_call_nosemi {} ;
 var_const_decl_list: /**/ | var_const_decl_list1 {};
 var_const_decl_list1: var_decl {} | const_decl {} 
 					| var_const_decl_list var_decl {}

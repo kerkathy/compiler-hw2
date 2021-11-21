@@ -96,7 +96,7 @@ float {integer}\.(0|[0-9]*[1-9])
 {float} { TOKEN_STRING(float, yytext); yylval = yytext; return REAL_NUM; }
 
     /* Scientific Notation [Ee][+-]?[0-9]+ */
-({integer}|{float})[Ee][+-]?({integer}) { TOKEN_STRING(scientific, yytext); }
+({integer}|{float})[Ee][+-]?({integer}) { TOKEN_STRING(scientific, yytext); return REAL_NUM; }
 
     /* String */
 \"([^"\n]|\"\")*\" {
