@@ -39,13 +39,11 @@ arg: id_list COLON type {};
 id_list: ID {}
 	   | id_list COMMA ID {};
 var_decl: VAR id_list COLON scal_type SEMI {}
-		/*| VAR id_list COLON ARRAY int_const OF type SEMI {};*/
 		| VAR id_list COLON ARRAY INT_NUM OF type SEMI {};
 type: scal_type | arr_type;
 scal_type: INTEGER {} | REAL {} | STRING {} | BOOL {};
 arr_type: ARRAY INT_NUM OF type {};
 const_decl: VAR id_list COLON lit_const SEMI {};
-/*int_const: INT_NUM {};*/
 lit_const: INT_NUM {} | REAL_NUM {} | STR_LIT {} | TRUE {} | FALSE {};
 stmt: comp_stmt {} | simp_stmt {} | cond_stmt {} | while_stmt {} | for_stmt {} | return_stmt {} | func_call {} ;
 comp_stmt: BEG var_const_decl_list stmt_list END {};
