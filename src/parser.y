@@ -50,9 +50,9 @@ lit_const: INT_NUM {} | REAL_NUM {} | STR_LIT {} | TRUE {} | FALSE {};
 stmt: comp_stmt {} | simp_stmt {} | cond_stmt {} | while_stmt {} | for_stmt {} | return_stmt {};
 comp_stmt: BEG var_const_decl_list stmt_list END {};
 simp_stmt: assign_stmt {} | print_stmt {} | read_stmt {};
-assign_stmt: var_ref ASSIGN stmt {};
-print_stmt: PRINT expr {};
-read_stmt: READ var_ref {};
+assign_stmt: var_ref ASSIGN expr SEMI {};
+print_stmt: PRINT expr SEMI {};
+read_stmt: READ var_ref SEMI {};
 var_ref: ID {} | arr_inf {};
 arr_inf: ID brkt_list {};
 brkt_list: /*empty*/ | brkt_list1 {};
@@ -63,8 +63,8 @@ cond_stmt: IF expr THEN comp_stmt ELSE comp_stmt END IF {}
 while_stmt: WHILE expr DO comp_stmt END DO {};
 for_stmt: FOR ID ASSIGN INT_NUM TO INT_NUM DO comp_stmt END DO {};
 /*for_stmt: FOR ID ASSIGN int_const TO int_const DO comp_stmt END DO {};*/
-return_stmt: RETURN expr {};
-func_call: ID LEFT_PRN expr_list RIGHT_PRN SEMI {};
+return_stmt: RETURN expr SEMI {};
+func_call: ID LEFT_PRN expr_list RIGHT_PRN {};
 expr: lit_const {} | var_ref {} | func_call {} | arith_expr {};
 arith_expr: arith_expr AND arith_expr {}
 		  | arith_expr OR arith_expr {}
@@ -80,8 +80,9 @@ arith_expr: arith_expr AND arith_expr {}
 		  | arith_expr DIV arith_expr {}
 		  | arith_expr MOD arith_expr {}
 		  | arith_expr MUL arith_expr {}
-		  | SUB arith_expr %prec MUL {};
-
+		  | SUB arith_expr %prec MUL {}
+		  | lit_const {} 
+		  | var_ref {} ;
 var_const_decl_list: /**/ | var_const_decl_list1 {};
 var_const_decl_list1: var_decl {} | const_decl {} 
 					| var_const_decl_list var_decl {}
