@@ -40,6 +40,8 @@ For those "zero or more..." declarations, I use `...list` as a naming convention
 * `brkt_list`: holds zero or more brackets
 * `stmt_list`: holds zero or more statements
 * `expr_list`: holds zero or more expressions
+
+
 Some of the lists hold more than one tokens. In that case, replace `arg` in 
 ```yacc
 argseq : /* empty */ | argseq1 ;
@@ -71,7 +73,7 @@ scal_type: INTEGER {} | REAL {} | STRING {} | BOOL {};
 arr_type: ARRAY INT_NUM OF type {};
 ```
 
-I name the constants with suffix `num` or `lit` (which stands for literal). 
+I name the constants with suffix `NUM` or `LIT` (which stands for literal). 
 ```yacc
 lit_const: INT_NUM {} | REAL_NUM {} | STR_LIT {} | TRUE {} | FALSE {};
 ```
