@@ -45,13 +45,11 @@ For those "zero or more..." declarations, I use `...list` as a naming convention
 Some of the lists hold more than one tokens. In that case, replace `arg` in 
 ```yacc
 argseq : /* empty */ | argseq1 ;
-
 argseq1 : arg | argseq1 ',' arg ;
 ```
 as
 ```yacc
 argseq : /* empty */ | argseq1 ;
-
 argseq1 : arg_1 | arg_2 |... | argseq1 ',' arg_1 | argseq1 ',' arg_2 | ... ;
 ```
 such as 
