@@ -29,71 +29,71 @@ float {integer}\.(0|[0-9]*[1-9])
 
 %%
     /* Delimiter */
-"," { TOKEN_CHAR(','); }
-";" { TOKEN_CHAR(';'); }
-":" { TOKEN_CHAR(':'); }
-"(" { TOKEN_CHAR('('); }
-")" { TOKEN_CHAR(')'); }
-"[" { TOKEN_CHAR('['); }
-"]" { TOKEN_CHAR(']'); }
+"," { TOKEN_CHAR(','); return COMMA;}
+";" { TOKEN_CHAR(';'); return SEMI; }
+":" { TOKEN_CHAR(':'); return COLON;}
+"(" { TOKEN_CHAR('('); return LEFT_PRN; }
+")" { TOKEN_CHAR(')'); return RIGHT_PRN; }
+"[" { TOKEN_CHAR('['); return LEFT_BRKT; }
+"]" { TOKEN_CHAR(']'); return RIGHT_BRKT; }
 
     /* Operator */
-"+"   { TOKEN_CHAR('+'); }
-"-"   { TOKEN_CHAR('-'); }
-"*"   { TOKEN_CHAR('*'); }
-"/"   { TOKEN_CHAR('/'); }
-"mod" { TOKEN(mod); }
-":="  { TOKEN(:=); }
-"<"   { TOKEN_CHAR('<'); }
-"<="  { TOKEN(<=); }
-"<>"  { TOKEN(<>); }
-">="  { TOKEN(>=); }
-">"   { TOKEN_CHAR('>'); }
-"="   { TOKEN_CHAR('='); }
-"and" { TOKEN(and); }
-"or"  { TOKEN(or); }
-"not" { TOKEN(not); }
+"+"   { TOKEN_CHAR('+'); return ADD; }
+"-"   { TOKEN_CHAR('-'); return SUB; }
+"*"   { TOKEN_CHAR('*'); return MUL; }
+"/"   { TOKEN_CHAR('/'); return DIV; }
+"mod" { TOKEN(mod); return MOD; }
+":="  { TOKEN(:=); return ASSIGN; }
+"<"   { TOKEN_CHAR('<'); return LESS; }
+"<="  { TOKEN(<=); return LESS_EQU; }
+"<>"  { TOKEN(<>); return NOT_EQU; }
+">="  { TOKEN(>=); return GREATER_EQU; }
+">"   { TOKEN_CHAR('>'); return GREATER; }
+"="   { TOKEN_CHAR('='); return EQU; }
+"and" { TOKEN(and); return AND; }
+"or"  { TOKEN(or); return OR; }
+"not" { TOKEN(not); return NOT; }
 
     /* Reserved Word */
-"var"     { TOKEN(KWvar); }
-"array"   { TOKEN(KWarray); }
-"of"      { TOKEN(KWof); }
-"boolean" { TOKEN(KWboolean); }
-"integer" { TOKEN(KWinteger); }
-"real"    { TOKEN(KWreal); }
-"string"  { TOKEN(KWstring); }
+"var"     { TOKEN(KWvar); return VAR; }
+"array"   { TOKEN(KWarray); return ARRAY; }
+"of"      { TOKEN(KWof); return OF; }
+"boolean" { TOKEN(KWboolean); return BOOL; }
+"integer" { TOKEN(KWinteger); return INTEGER; }
+"real"    { TOKEN(KWreal); return REAL; }
+"string"  { TOKEN(KWstring); return STRING; }
 
-"true"    { TOKEN(KWtrue); }
-"false"   { TOKEN(KWfalse); }
+"true"    { TOKEN(KWtrue); return TRUE; }
+"false"   { TOKEN(KWfalse); return FALSE; }
 
-"def"     { TOKEN(KWdef); }
-"return"  { TOKEN(KWreturn); }
+"def"     { TOKEN(KWdef); return DEF; }
+"return"  { TOKEN(KWreturn); return RETURN; }
 
-"begin"   { TOKEN(KWbegin); }
-"end"     { TOKEN(KWend); }
+"begin"   { TOKEN(KWbegin); return BEG; }
+"end"     { TOKEN(KWend); return END; }
 
-"while"   { TOKEN(KWwhile); }
-"do"      { TOKEN(KWdo); }
+"while"   { TOKEN(KWwhile); return WHILE; }
+"do"      { TOKEN(KWdo); return DO; }
 
-"if"      { TOKEN(KWif); }
-"then"    { TOKEN(KWthen); }
-"else"    { TOKEN(KWelse); }
+"if"      { TOKEN(KWif); return IF; }
+"then"    { TOKEN(KWthen); return THEN; }
+"else"    { TOKEN(KWelse); return ELSE; }
 
-"for"     { TOKEN(KWfor); }
-"to"      { TOKEN(KWto); }
+"for"     { TOKEN(KWfor); return FOR; }
+"to"      { TOKEN(KWto); return TO; }
 
-"print"   { TOKEN(KWprint); }
-"read"    { TOKEN(KWread); }
+"print"   { TOKEN(KWprint); return PRINT; }
+"read"    { TOKEN(KWread); return READ; }
 
     /* Identifier */
-[a-zA-Z][a-zA-Z0-9]* { TOKEN_STRING(id, yytext); }
+[a-zA-Z][a-zA-Z0-9]* { TOKEN_STRING(id, yytext); yylval = yytext; return ID; }
 
     /* Integer (decimal/octal) */
-{integer} { TOKEN_STRING(integer, yytext); }
-0[0-7]+   { TOKEN_STRING(oct_integer, yytext); }
+{integer} { TOKEN_STRING(integer, yytext); yylval = atoi(yytext); return INT_NUM; }
+0[0-7]+   { TOKEN_STRING(oct_integer, yytext); yylval = atoi(yytext); return INT_NUM; }
 
     /* Floating-Point */
-{float} { TOKEN_STRING(float, yytext); }
+{float} { TOKEN_STRING(float, yytext); yylval = yytext; return REAL_NUM; }
 
     /* Scientific Notation [Ee][+-]?[0-9]+ */
 ({integer}|{float})[Ee][+-]?({integer}) { TOKEN_STRING(scientific, yytext); }
@@ -121,6 +121,9 @@ float {integer}\.(0|[0-9]*[1-9])
     }
     *str_ptr = '\0';
     TOKEN_STRING(string, string_literal);
+	yylval = string_literal;
+	return STR_LIT;
+	// not sure whether to return sth ?	
 }
 
     /* Whitespace */
