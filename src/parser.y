@@ -81,8 +81,8 @@ arith_expr: arith_expr AND arith_expr {}
 		  | arith_expr MOD arith_expr {}
 		  | arith_expr MUL arith_expr {}
 		  | SUB arith_expr %prec MUL {}
-		  | lit_const {} 
-		  | var_ref {} ;
+		  | LEFT_PRN arith_expr RIGHT_PRN {} 
+		  | lit_const {} | var_ref {} | func_call {} ;
 var_const_decl_list: /**/ | var_const_decl_list1 {};
 var_const_decl_list1: var_decl {} | const_decl {} 
 					| var_const_decl_list var_decl {}
@@ -95,7 +95,7 @@ stmt_list: /**/ | stmt_list1 {};
 stmt_list1: stmt {} | stmt_list1 stmt {}
 		  | stmt_list1 stmt {};
 expr_list: /**/ | expr_list1 {};
-expr_list1: expr {} | expr_list1 expr {};
+expr_list1: expr {} | expr_list1 COMMA expr {};
 
 
 %%
